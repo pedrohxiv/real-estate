@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { Providers } from "@/components/providers";
 import "@/styles/globals.css";
 
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Real Estate",
+  icons: { icon: "/icon.svg" },
 };
 
 interface RootLayoutProps {
@@ -16,7 +18,9 @@ interface RootLayoutProps {
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html>
-      <body className={font.className}>{children}</body>
+      <body className={font.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 };
