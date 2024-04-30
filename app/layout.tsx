@@ -1,10 +1,8 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
-import { Providers } from "@/components/providers";
+import { Header } from "@/components/header";
 import "@/styles/globals.css";
-
-const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Real Estate",
@@ -17,11 +15,14 @@ interface RootLayoutProps {
 
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
-    <html>
-      <body className={font.className}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html>
+        <body>
+          <Header />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 };
 

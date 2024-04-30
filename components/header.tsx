@@ -1,5 +1,6 @@
 "use client";
 
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +13,7 @@ export const Header = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex justify-between p-6 px-10 shadow-sm fixed top-0 w-full z-10 bg-white">
+    <header className="flex justify-between p-6 px-10 shadow-sm fixed top-0 w-full z-20 bg-white">
       <div className="flex gap-10 items-center">
         <Image src="/logo.svg" height={150} width={150} alt="Logo" />
         <ul className="hidden md:flex gap-10">
@@ -48,13 +49,20 @@ export const Header = () => {
           </Link>
         </ul>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <Button className="gap-2">
           <Plus className="h-5 w-5" />
           Post Your AD
         </Button>
-        <Button variant="outline">Login</Button>
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+        <SignedOut>
+          <SignInButton>
+            <Button variant="outline">Login</Button>
+          </SignInButton>
+        </SignedOut>
       </div>
-    </div>
+    </header>
   );
 };
