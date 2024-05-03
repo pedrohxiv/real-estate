@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 
 import { Header } from "@/components/header";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +20,8 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       <html>
         <body>
           <Header />
-          {children}
+          <main>{children}</main>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

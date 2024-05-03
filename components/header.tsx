@@ -15,7 +15,7 @@ export const Header = () => {
   return (
     <header className="flex justify-between p-6 px-10 shadow-sm fixed top-0 w-full z-20 bg-white">
       <div className="flex gap-10 items-center">
-        <Image src="/logo.svg" height={150} width={150} alt="Logo" />
+        <Image src="/logo.svg" height={150} width={150} alt="Logo" priority />
         <ul className="hidden md:flex gap-10">
           <Link href="/">
             <li
@@ -50,10 +50,12 @@ export const Header = () => {
         </ul>
       </div>
       <div className="flex gap-2 items-center">
-        <Button className="gap-2">
-          <Plus className="h-5 w-5" />
-          Post Your AD
-        </Button>
+        <Link href="/add-new-listing">
+          <Button className="gap-2">
+            <Plus className="h-5 w-5" />
+            Post Your AD
+          </Button>
+        </Link>
         <SignedIn>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>
