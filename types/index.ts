@@ -30,8 +30,8 @@ export type Coordinates = {
 };
 
 export type Listing = {
-  type: string;
-  property_type: string;
+  type?: string;
+  property_type?: string;
   bedroom?: number;
   bathroom?: number;
   parking?: number;
