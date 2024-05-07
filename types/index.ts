@@ -41,4 +41,5 @@ export type Listing = {
   price?: number;
   hoa?: number;
   description?: string;
+  listing_images?: { listing_id: number; url: string }[];
 };

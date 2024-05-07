@@ -22,6 +22,8 @@ import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import type { Listing } from "@/types";
 
+import { FileUpload } from "./_components/file-upload";
+
 interface EditListingPageProps {
   params: {
     id: string;
@@ -29,9 +31,10 @@ interface EditListingPageProps {
 }
 
 const EditListingPage = ({ params }: EditListingPageProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [type, setType] = useState<string>("");
   const [listing, setListing] = useState<Listing>();
+  const [images, setImages] = useState<string[]>([]);
 
   const { toast } = useToast();
   const { user } = useUser();
@@ -47,6 +50,54 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
       .eq("id", params.id)
       .select();
 
+    for (const image of images) {
+      const file = Date.now().toString();
+
+      const { data, error } = await supabase.storage
+        .from("listing_images")
+        .upload(`${file}`, image, {
+          contentType: `image/${file.split(".").pop()}`,
+          upsert: false,
+        });
+
+      if (data) {
+        toast({
+          title: "Success!",
+          description: "Your listing images has uploaded.",
+        });
+
+        const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/${file}`;
+
+        const { data, error } = await supabase
+          .from("listing_images")
+          .insert([{ url, listing_id: params.id }])
+          .select();
+
+        if (data) {
+          toast({
+            title: "Success!",
+            description: "Your listing images has saved.",
+          });
+        }
+
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with saving listing images.",
+          });
+        }
+      }
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with uploading listing images.",
+        });
+      }
+    }
+
     if (data) {
       toast({
         title: "Success!",
@@ -58,7 +109,7 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
+        description: "There was a problem with updating listing.",
       });
     }
 
@@ -72,7 +123,7 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
 
         const { data } = await supabase
           .from("listing")
-          .select()
+          .select("*,listing_images(listing_id,url)")
           .eq("created_by", user?.primaryEmailAddress?.emailAddress)
           .eq("id", params.id);
 
@@ -289,6 +340,17 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
                     name="description"
                     onChange={handleChange}
                     disabled={isLoading}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-10">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg text-gray-500">
+                    Upload Property Images
+                  </p>
+                  <FileUpload
+                    setImages={(value) => setImages(value)}
+                    imageList={listing?.listing_images}
                   />
                 </div>
               </div>
