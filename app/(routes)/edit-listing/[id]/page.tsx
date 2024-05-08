@@ -3,8 +3,19 @@
 import { useUser } from "@clerk/nextjs";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,7 +42,7 @@ interface EditListingPageProps {
 }
 
 const EditListingPage = ({ params }: EditListingPageProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [type, setType] = useState<string>("");
   const [listing, setListing] = useState<Listing>();
   const [images, setImages] = useState<string[]>([]);
@@ -40,8 +51,9 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
   const { user } = useUser();
 
   const router = useRouter();
+  const saveRef = useRef<HTMLButtonElement>(null);
 
-  const onSubmit = async (values: Listing) => {
+  const handleSave = async (values: Listing) => {
     setIsLoading(true);
 
     const { data, error } = await supabase
@@ -116,11 +128,38 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
     setIsLoading(false);
   };
 
+  const handlePublish = async () => {
+    setIsLoading(true);
+
+    saveRef.current?.click();
+
+    const { data, error } = await supabase
+      .from("listing")
+      .update({ active: true })
+      .eq("id", params.id)
+      .select();
+
+    if (data) {
+      toast({
+        title: "Success!",
+        description: "Your listing has published.",
+      });
+    }
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with publishing listing.",
+      });
+    }
+
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     user &&
       (async () => {
-        setIsLoading(true);
-
         const { data } = await supabase
           .from("listing")
           .select("*,listing_images(listing_id,url)")
@@ -150,7 +189,7 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
           full_name: user?.fullName,
           profile_image: user?.imageUrl,
         }}
-        onSubmit={(values) => onSubmit({ ...values, type })}
+        onSubmit={(values) => handleSave({ ...values, type })}
       >
         {({ handleChange, handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
@@ -351,21 +390,49 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
                   <FileUpload
                     setImages={(value) => setImages(value)}
                     imageList={listing?.listing_images}
+                    disabled={isLoading}
                   />
                 </div>
               </div>
               <div className="flex gap-7 justify-end">
                 <Button
                   variant="outline"
+                  ref={saveRef}
                   className="border-primary text-primary hover:text-primary"
                   type="submit"
                   disabled={isLoading}
                 >
                   Save
                 </Button>
-                <Button type="submit" disabled={isLoading}>
-                  Save & Publish
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button type="button" disabled={isLoading}>
+                      Save & Publish
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you sure you want to publish?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. Once published, your real
+                        estate ad will be visible to the public.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel disabled={isLoading}>
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handlePublish}
+                        disabled={isLoading}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </form>

@@ -24,7 +24,7 @@ export const Header = () => {
                 pathname === "/" && "text-primary"
               )}
             >
-              For Sale
+              For Sell
             </li>
           </Link>
           <Link href="/">

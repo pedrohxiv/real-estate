@@ -1,12 +1,19 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 interface FileUploadProps {
   setImages: (value: any) => void;
   imageList?: { listing_id: number; url: string }[];
+  disabled: boolean;
 }
 
-export const FileUpload = ({ setImages, imageList }: FileUploadProps) => {
+export const FileUpload = ({
+  setImages,
+  imageList,
+  disabled,
+}: FileUploadProps) => {
   const [imagePreview, setImagePreview] = useState<string[]>([]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +32,12 @@ export const FileUpload = ({ setImages, imageList }: FileUploadProps) => {
 
   return (
     <>
-      <div className="flex items-center justify-center w-full">
+      <div
+        className={cn(
+          "flex items-center justify-center w-full",
+          disabled && "pointer-events-none opacity-50"
+        )}
+      >
         <label
           htmlFor="dropzone-file"
           className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
