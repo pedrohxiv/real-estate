@@ -5,12 +5,11 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { GoogleAddressSearch } from "@/components/google-address-search";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import type { AddressType, CoordinatesType } from "@/types";
-
-import { GoogleAddressSearch } from "./_components/google-address-search";
 
 const AddNewListingPage = () => {
   const [address, setAddress] = useState<AddressType | null>(null);

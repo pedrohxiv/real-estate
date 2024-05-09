@@ -19,11 +19,11 @@ export const GoogleAddressSearch = ({
 }: GoogleAddressSearchProps) => {
   return (
     <div className="flex items-center w-full">
-      <MapPin className="h-[38px] w-[38px] p-2 rounded-l-md text-primary border border-r-0 border-[#1f085e]" />
+      <MapPin className="h-[38px] w-[38px] p-2 rounded-l-md text-primary border border-r-0 border-[#1f085e] bg-purple-400/20" />
       <GooglePlacesAutocomplete
         apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACE_API_KEY}
         selectProps={{
-          placeholder: "Search Property Address",
+          placeholder: "Search property address",
           isClearable: true,
           className: "w-full",
           onChange: (place) => {
