@@ -1,4 +1,4 @@
-export type Address = {
+export type AddressType = {
   label: string;
   value: {
     description: string;
@@ -24,12 +24,12 @@ export type Address = {
   };
 };
 
-export type Coordinates = {
+export type CoordinatesType = {
   lat: number;
   lng: number;
 };
 
-export type Listing = {
+export type ListingType = {
   type?: string;
   property_type?: string;
   bedroom?: number;
@@ -42,4 +42,5 @@ export type Listing = {
   hoa?: number;
   description?: string;
   listing_images?: { listing_id: number; url: string }[];
+  address?: string;
 };

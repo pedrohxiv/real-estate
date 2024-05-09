@@ -8,13 +8,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-import type { Address, Coordinates } from "@/types";
+import type { AddressType, CoordinatesType } from "@/types";
 
 import { GoogleAddressSearch } from "./_components/google-address-search";
 
 const AddNewListingPage = () => {
-  const [address, setAddress] = useState<Address | null>(null);
-  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+  const [address, setAddress] = useState<AddressType | null>(null);
+  const [coordinates, setCoordinates] = useState<CoordinatesType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { user } = useUser();

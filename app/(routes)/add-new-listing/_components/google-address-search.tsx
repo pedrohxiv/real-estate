@@ -6,11 +6,11 @@ import GooglePlacesAutocomplete, {
   getLatLng,
 } from "react-google-places-autocomplete";
 
-import type { Address, Coordinates } from "@/types";
+import type { AddressType, CoordinatesType } from "@/types";
 
 interface GoogleAddressSearchProps {
-  setAddress: (value: Address | null) => void;
-  setCoordinates: (value: Coordinates | null) => void;
+  setAddress: (value: AddressType | null) => void;
+  setCoordinates: (value: CoordinatesType | null) => void;
 }
 
 export const GoogleAddressSearch = ({

@@ -31,7 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
-import type { Listing } from "@/types";
+import type { ListingType } from "@/types";
 
 import { FileUpload } from "./_components/file-upload";
 
@@ -44,7 +44,7 @@ interface EditListingPageProps {
 const EditListingPage = ({ params }: EditListingPageProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [type, setType] = useState<string>("");
-  const [listing, setListing] = useState<Listing>();
+  const [listing, setListing] = useState<ListingType>();
   const [images, setImages] = useState<string[]>([]);
 
   const { toast } = useToast();
@@ -53,7 +53,7 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
   const router = useRouter();
   const saveRef = useRef<HTMLButtonElement>(null);
 
-  const handleSave = async (values: Listing) => {
+  const handleSave = async (values: ListingType) => {
     setIsLoading(true);
 
     const { data, error } = await supabase
@@ -160,7 +160,7 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
   useEffect(() => {
     user &&
       (async () => {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("listing")
           .select("*,listing_images(listing_id,url)")
           .eq("created_by", user?.primaryEmailAddress?.emailAddress)
@@ -173,6 +173,14 @@ const EditListingPage = ({ params }: EditListingPageProps) => {
         if (data) {
           setListing(data[0]);
           setType(data[0].type);
+        }
+
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with getting the listing.",
+          });
         }
 
         setIsLoading(false);
