@@ -14,19 +14,32 @@ interface ListingMapViewProps {
 
 export const ListingMapView = ({ type }: ListingMapViewProps) => {
   const [listing, setListing] = useState<ListingType[]>();
+  const [bedCount, setBedCount] = useState<number>(0);
+  const [bathCount, setBathCount] = useState<number>(0);
+  const [parkingCount, setParkingCount] = useState<number>(0);
+  const [homeType, setHomeType] = useState<string>("");
 
   const { toast } = useToast();
 
   const handleSearch = async (value: AddressType | null) => {
     const searchTerm = value?.value.structured_formatting.main_text || "";
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("listing")
       .select("*,listing_images(listing_id,url)")
       .eq("active", true)
       .eq("type", type)
+      .gte("bedroom", bedCount)
+      .gte("bathroom", bathCount)
+      .gte("parking", parkingCount)
       .like("address", `%${searchTerm}%`)
       .order("id", { ascending: false });
+
+    if (homeType) {
+      query = query.eq("property_type", homeType);
+    }
+
+    const { data, error } = await query;
 
     if (data) {
       setListing(data);
@@ -69,6 +82,10 @@ export const ListingMapView = ({ type }: ListingMapViewProps) => {
       <Listing
         listing={listing}
         handleSearch={(value) => handleSearch(value)}
+        setBedCount={(value) => setBathCount(+value)}
+        setBathCount={(value) => setBathCount(+value)}
+        setParkingCount={(value) => setParkingCount(+value)}
+        setHomeType={(value) => setHomeType(value)}
       />
     </div>
   );

@@ -1,21 +1,35 @@
-import { BathIcon, BedDouble, MapIcon, Ruler } from "lucide-react";
+import { BathIcon, BedDouble, MapIcon, Ruler, Search } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
 import { GoogleAddressSearch } from "@/components/google-address-search";
 import type { AddressType, ListingType } from "@/types";
 
+import { Button } from "@/components/ui/button";
+import { Filters } from "./filters";
+
 interface ListingProps {
   listing?: ListingType[];
   handleSearch: (value: AddressType | null) => void;
+  setBedCount: (value: string) => void;
+  setBathCount: (value: string) => void;
+  setParkingCount: (value: string) => void;
+  setHomeType: (value: string) => void;
 }
 
-export const Listing = ({ listing, handleSearch }: ListingProps) => {
+export const Listing = ({
+  listing,
+  handleSearch,
+  setBedCount,
+  setBathCount,
+  setParkingCount,
+  setHomeType,
+}: ListingProps) => {
   const [address, setAddress] = useState<AddressType | null>(null);
 
   return (
     <div>
-      <div className="flex flex-row gap-6 p-3">
+      <div className="flex flex-col gap-6 p-3">
         <GoogleAddressSearch
           setAddress={(value) => {
             setAddress(value);
@@ -23,12 +37,36 @@ export const Listing = ({ listing, handleSearch }: ListingProps) => {
           }}
           setCoordinates={() => {}}
         />
+        <div className="flex flex-row gap-3">
+          <Filters
+            setBedCount={setBedCount}
+            setBathCount={setBathCount}
+            setParkingCount={setParkingCount}
+            setHomeType={setHomeType}
+          />
+          <Button className="gap-2" onClick={() => handleSearch(null)}>
+            <Search className="h-4 w-4" />
+            Search
+          </Button>
+        </div>
       </div>
-      {address && listing && (
+      {!listing?.length ? (
+        <div className="h-5 w-36 bg-slate-200 animate-pulse rounded-lg mx-3" />
+      ) : (
         <p className="text-sm text-gray-400 truncate w-full px-3">
-          Found <span className="text-primary font-bold">{listing.length}</span>{" "}
-          {listing.length > 1 ? "results" : "result"} in{" "}
-          <span className="text-primary font-bold">{address.label}</span>
+          Found{" "}
+          <span className="text-primary font-bold">
+            {listing.length > 999 ? "999+" : listing.length}
+          </span>
+          {listing.length > 1 ? " results" : " result"}
+          {address ? (
+            <>
+              {" "}
+              in <span className="text-primary font-bold">{address.label}</span>
+            </>
+          ) : (
+            "."
+          )}
         </p>
       )}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
