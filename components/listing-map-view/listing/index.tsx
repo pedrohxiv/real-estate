@@ -1,11 +1,11 @@
-import { BathIcon, BedDouble, MapIcon, Ruler, Search } from "lucide-react";
+import { BathIcon, BedDouble, MapPin, Ruler, Search } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
 import { GoogleAddressSearch } from "@/components/google-address-search";
-import type { AddressType, ListingType } from "@/types";
-
 import { Button } from "@/components/ui/button";
+import type { AddressType, CoordinatesType, ListingType } from "@/types";
+
 import { Filters } from "./filters";
 
 interface ListingProps {
@@ -15,6 +15,7 @@ interface ListingProps {
   setBathCount: (value: string) => void;
   setParkingCount: (value: string) => void;
   setHomeType: (value: string) => void;
+  setCoordinates: (value: CoordinatesType | null) => void;
 }
 
 export const Listing = ({
@@ -24,6 +25,7 @@ export const Listing = ({
   setBathCount,
   setParkingCount,
   setHomeType,
+  setCoordinates,
 }: ListingProps) => {
   const [address, setAddress] = useState<AddressType | null>(null);
 
@@ -35,7 +37,7 @@ export const Listing = ({
             setAddress(value);
             handleSearch(value);
           }}
-          setCoordinates={() => {}}
+          setCoordinates={(value) => setCoordinates(value)}
         />
         <div className="flex flex-row gap-3">
           <Filters
@@ -72,11 +74,11 @@ export const Listing = ({
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
         {!listing?.length ? (
           <>
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
+            <ListingItemSkeleton />
+            <ListingItemSkeleton />
+            <ListingItemSkeleton />
+            <ListingItemSkeleton />
+            <ListingItemSkeleton />
           </>
         ) : (
           listing.map((item, index) => (
@@ -89,14 +91,17 @@ export const Listing = ({
                 height={170}
                 width={800}
                 alt={`Listing ${index}`}
-                className="rounded-lg object-cover h-[170px]"
+                priority
+                className="rounded-lg object-cover h-[170px] w-[800px]"
               />
               <div className="flex mt-2 flex-col gap-2">
                 <h2 className="font-bold text-xl">${item.price}</h2>
-                <h6 className="flex gap-2 text-sm text-gray-400 items-center">
-                  <MapIcon className="h-8 w-8" />
-                  {item.address}
-                </h6>
+                <div className="flex flex-row items-center gap-2 text-sm text-gray-400">
+                  <div>
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <h6 className="truncate">{item.address}</h6>
+                </div>
                 <div className="flex gap-2 mt-2 justify-between">
                   <p className="flex gap-2 text-sm bg-slate-200 rounded-md p-2 w-full text-gray-500 justify-center items-center">
                     <BedDouble className="h-4 w-4" />
@@ -120,7 +125,7 @@ export const Listing = ({
   );
 };
 
-const Skeleton = () => {
+export const ListingItemSkeleton = () => {
   return (
     <div className="flex flex-col m-2 mt-3 gap-3">
       <div className="h-[170px] w-full bg-slate-200 animate-pulse rounded-lg" />

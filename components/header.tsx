@@ -15,7 +15,14 @@ export const Header = () => {
   return (
     <header className="flex justify-between p-6 px-10 shadow-sm fixed top-0 w-full z-20 bg-white">
       <div className="flex gap-10 items-center">
-        <Image src="/logo.svg" height={150} width={150} alt="Logo" priority />
+        <Image
+          src="/logo.svg"
+          height={150}
+          width={150}
+          alt="Logo"
+          priority
+          className="h-auto w-auto"
+        />
         <ul className="hidden md:flex gap-10">
           <Link href="/">
             <li

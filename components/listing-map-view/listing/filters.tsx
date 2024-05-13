@@ -1,3 +1,5 @@
+import { Bath, BedDoubleIcon, CarFront } from "lucide-react";
+
 import {
   Select,
   SelectContent,
@@ -5,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Bath, BedDoubleIcon, CarFront } from "lucide-react";
 
 interface FiltersProps {
   setBedCount: (value: string) => void;

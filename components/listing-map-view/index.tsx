@@ -1,12 +1,11 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
+import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-import type { AddressType, ListingType } from "@/types";
+import type { AddressType, CoordinatesType, ListingType } from "@/types";
 
-import { useToast } from "../ui/use-toast";
 import { Listing } from "./listing";
+import { Map } from "./map";
 
 interface ListingMapViewProps {
   type: "Sell";
@@ -18,6 +17,7 @@ export const ListingMapView = ({ type }: ListingMapViewProps) => {
   const [bathCount, setBathCount] = useState<number>(0);
   const [parkingCount, setParkingCount] = useState<number>(0);
   const [homeType, setHomeType] = useState<string>("");
+  const [coordinates, setCoordinates] = useState<CoordinatesType | null>();
 
   const { toast } = useToast();
 
@@ -78,15 +78,17 @@ export const ListingMapView = ({ type }: ListingMapViewProps) => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24 p-10">
       <Listing
         listing={listing}
         handleSearch={(value) => handleSearch(value)}
-        setBedCount={(value) => setBathCount(+value)}
+        setBedCount={(value) => setBedCount(+value)}
         setBathCount={(value) => setBathCount(+value)}
         setParkingCount={(value) => setParkingCount(+value)}
         setHomeType={(value) => setHomeType(value)}
+        setCoordinates={(value) => setCoordinates(value)}
       />
+      <Map coordinates={coordinates} />
     </div>
   );
 };
