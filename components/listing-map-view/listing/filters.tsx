@@ -22,7 +22,7 @@ export const Filters = ({
   setHomeType,
 }: FiltersProps) => {
   return (
-    <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 w-full">
+    <div className="grid grid-cols-2 xl:flex xl:flex-row gap-3 w-full">
       <Select onValueChange={setBedCount}>
         <SelectTrigger>
           <SelectValue placeholder="Bed" />

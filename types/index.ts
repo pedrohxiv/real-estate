@@ -43,4 +43,5 @@ export type ListingType = {
   description?: string;
   listing_images?: { listing_id: number; url: string }[];
   address?: string;
+  coordinates?: { lat: number; lng: number };
 };

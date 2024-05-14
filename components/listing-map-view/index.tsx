@@ -78,7 +78,7 @@ export const ListingMapView = ({ type }: ListingMapViewProps) => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24 p-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 p-10">
       <Listing
         listing={listing}
         handleSearch={(value) => handleSearch(value)}
@@ -88,7 +88,7 @@ export const ListingMapView = ({ type }: ListingMapViewProps) => {
         setHomeType={(value) => setHomeType(value)}
         setCoordinates={(value) => setCoordinates(value)}
       />
-      <Map coordinates={coordinates} />
+      <Map coordinates={coordinates} listing={listing} />
     </div>
   );
 };

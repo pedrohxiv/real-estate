@@ -19,12 +19,12 @@ const RootPage = () => {
 
 const RootPageSkeleton = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24 p-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 p-10">
       <div>
         <div className="flex flex-col gap-6 p-3">
           <div className="w-full h-[38px] bg-slate-200 animate-pulse rounded-lg" />
           <div className="flex flex-row gap-3">
-            <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 w-full">
+            <div className="grid grid-cols-2 xl:flex xl:flex-row gap-3 w-full">
               <div className="h-10 w-full bg-slate-200 animate-pulse rounded-lg" />
               <div className="h-10 w-full bg-slate-200 animate-pulse rounded-lg" />
               <div className="h-10 w-full bg-slate-200 animate-pulse rounded-lg" />
@@ -42,9 +42,7 @@ const RootPageSkeleton = () => {
           <ListingItemSkeleton />
         </div>
       </div>
-      <div className="fixed right-10 h-full p-3 md:w-[350px] lg:w-[450px] xl:w-[600px] 2xl:w-[700px]">
-        <div className="h-[75vh] w-full bg-slate-200 animate-pulse rounded-lg" />
-      </div>
+      <div className="fixed right-0 mt-3 mr-10 h-[75vh] w-[42.8%] lg:w-[45.8%] bg-slate-200 animate-pulse rounded-lg" />
     </div>
   );
 };
