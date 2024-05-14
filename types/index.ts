@@ -30,6 +30,7 @@ export type CoordinatesType = {
 };
 
 export type ListingType = {
+  id?: number;
   type?: string;
   property_type?: string;
   bedroom?: number;
@@ -44,4 +45,7 @@ export type ListingType = {
   listing_images?: { listing_id: number; url: string }[];
   address?: string;
   coordinates?: { lat: number; lng: number };
+  profile_image?: string;
+  full_name?: string;
+  created_by?: string;
 };

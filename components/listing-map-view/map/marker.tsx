@@ -1,6 +1,7 @@
 import { MarkerF, OverlayView } from "@react-google-maps/api";
 import { BathIcon, BedDouble, MapPin, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,7 @@ export const Marker = ({ item }: MarkerProps) => {
               src={item.listing_images![0].url}
               height={120}
               width={180}
-              alt={`Listing`}
+              alt="Listing"
               priority
               className="rounded-lg object-cover h-[120px] w-[180px]"
             />
@@ -57,7 +58,11 @@ export const Marker = ({ item }: MarkerProps) => {
                   {item.bathroom}
                 </p>
               </div>
-              <Button size="sm">View Details</Button>
+              <Link href={`/view-listing/${item.id}`}>
+                <Button size="sm" className="w-full">
+                  View Details
+                </Button>
+              </Link>
             </div>
           </div>
         </OverlayView>
