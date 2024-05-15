@@ -1,15 +1,25 @@
 "use client";
 
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
 export const Header = () => {
+  const { isSignedIn, user } = useUser();
+
   const pathname = usePathname();
 
   return (
@@ -44,13 +54,6 @@ export const Header = () => {
               For Rent
             </li>
           </Link>
-          <li
-            className={cn(
-              "hover:text-primary cursor-pointer font-medium text-sm"
-            )}
-          >
-            Agent Finder
-          </li>
         </ul>
       </div>
       <div className="flex gap-2 items-center">
@@ -60,14 +63,36 @@ export const Header = () => {
             Post Your AD
           </Button>
         </Link>
-        <SignedIn>
-          <UserButton afterSignOutUrl="/" />
-        </SignedIn>
-        <SignedOut>
-          <SignInButton>
+        {isSignedIn ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Image
+                src={user.imageUrl}
+                height={35}
+                width={35}
+                alt="User image"
+                className="rounded-full ml-4 cursor-pointer"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link href="/user">Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Link href="/user/my-listing">My Listing</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <SignOutButton>Logout</SignOutButton>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link href="/sign-in">
             <Button variant="outline">Login</Button>
-          </SignInButton>
-        </SignedOut>
+          </Link>
+        )}
       </div>
     </header>
   );

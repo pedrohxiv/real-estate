@@ -46,6 +46,7 @@ export type ListingType = {
   address?: string;
   coordinates?: { lat: number; lng: number };
   profile_image?: string;
-  full_name?: string;
+  full_name: string | null | undefined;
   created_by?: string;
+  active?: boolean;
 };

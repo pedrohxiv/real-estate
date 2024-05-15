@@ -28,8 +28,8 @@ export const Slider = ({ imageList }: SliderProps) => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="hidden md:flex" />
+      <CarouselNext className="hidden md:flex" />
     </Carousel>
   ) : (
     <div className="w-full h-[360px] bg-slate-200 animate-pulse rounded-b-lg" />

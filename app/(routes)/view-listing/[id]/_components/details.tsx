@@ -1,17 +1,23 @@
+import { useUser } from "@clerk/nextjs";
 import {
   Bath,
   BedDouble,
   CarFront,
+  CheckCheck,
   Drill,
   Home,
   LandPlot,
   MapPin,
+  Pen,
   Share,
 } from "lucide-react";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { Map } from "@/components/listing-map-view/map";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import type { ListingType } from "@/types";
 
 interface DetailsProps {
@@ -19,20 +25,67 @@ interface DetailsProps {
 }
 
 export const Details = ({ listingDetails }: DetailsProps) => {
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const { user } = useUser();
+  const { toast } = useToast();
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.origin + pathname);
+
+    setCopied(true);
+
+    toast({
+      title: "Success!",
+      description: "Link copied to clipboard.",
+    });
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
+  };
+
   return (
     listingDetails && (
       <div className="flex flex-col gap-2 my-6">
         <div className="flex justify-between items-center">
-          <div>
-            <h2 className="font-bold text-3xl">${listingDetails.price}</h2>
-            <div className="flex flex-row items-center gap-2 mt-2 text-gray-400">
-              <MapPin className="w-5 h-5" />
-              <h6 className="truncate">{listingDetails.address}</h6>
+          <div className="w-full flex flex-row bg justify-between items-center">
+            <div>
+              <h2 className="font-bold text-3xl">${listingDetails.price}</h2>
+              <div className="flex flex-row items-center gap-2 mt-2 text-gray-400">
+                <div>
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <h6>{listingDetails.address}</h6>
+              </div>
+            </div>
+            <div className="p-2 flex flex-row gap-2">
+              {listingDetails.created_by ===
+                user?.emailAddresses[0].emailAddress && (
+                <Button
+                  variant="outline"
+                  className="flex gap-2"
+                  onClick={() =>
+                    router.push(`/edit-listing/${listingDetails.id}`)
+                  }
+                >
+                  <Pen className="h-4 w-4" />
+                  Edit
+                </Button>
+              )}
+              <Button className="flex gap-2" onClick={handleShare}>
+                {copied ? (
+                  <CheckCheck className="h-4 w-4" />
+                ) : (
+                  <Share className="h-4 w-4" />
+                )}
+                Share
+              </Button>
             </div>
           </div>
-          <Button className="flex gap-2">
-            <Share /> Share
-          </Button>
         </div>
         <hr />
         <div className="flex flex-col gap-3 mt-4">
