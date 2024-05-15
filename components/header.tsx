@@ -34,26 +34,23 @@ export const Header = () => {
               For Sell
             </li>
           </Link>
-          <Link href="/">
+          <Link href="/rent">
             <li
               className={cn(
                 "hover:text-primary cursor-pointer font-medium text-sm",
-                pathname === "/" && "text-primary"
+                pathname === "/rent" && "text-primary"
               )}
             >
               For Rent
             </li>
           </Link>
-          <Link href="/">
-            <li
-              className={cn(
-                "hover:text-primary cursor-pointer font-medium text-sm",
-                pathname === "/" && "text-primary"
-              )}
-            >
-              Agent Finder
-            </li>
-          </Link>
+          <li
+            className={cn(
+              "hover:text-primary cursor-pointer font-medium text-sm"
+            )}
+          >
+            Agent Finder
+          </li>
         </ul>
       </div>
       <div className="flex gap-2 items-center">

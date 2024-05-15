@@ -8,7 +8,7 @@ import { Listing } from "./listing";
 import { Map } from "./map";
 
 interface ListingMapViewProps {
-  type: "Sell";
+  type: "Sell" | "Rent";
 }
 
 export const ListingMapView = ({ type }: ListingMapViewProps) => {
